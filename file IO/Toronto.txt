@@ -1,0 +1,3 @@
+Winnipeg,4-2
+Montreal,4-4
+Los Angeles,9-11
