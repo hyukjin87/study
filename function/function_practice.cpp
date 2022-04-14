@@ -1,3 +1,9 @@
+/*
+* Description: It is a content that uses the getNum() function to receive numbers and 
+*			   check the input numbers within a designated range through 
+*			   the rangeChecker() function to raise two values using the powerCalculator() function.
+*/
+
 #include <stdio.h>
 #pragma warning(disable: 4996) 
 
