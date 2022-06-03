@@ -96,7 +96,10 @@ public class UserInput : MonoBehaviour
             {
                 if(slot1==seleced)
                 {
-                    AutoStack(seleced);
+                    if(!AutoStackTop(seleced))
+                    {
+                        AutoStackBottom(seleced);
+                    }
 
                     //if (DoubleClick())
                     //{
@@ -106,8 +109,10 @@ public class UserInput : MonoBehaviour
                 else
                 {
                     slot1 = seleced;
-                    AutoStack(seleced);
-
+                    if (!AutoStackTop(seleced))
+                    {
+                        AutoStackBottom(seleced);
+                    }
                 }
             }
         }
@@ -116,27 +121,33 @@ public class UserInput : MonoBehaviour
             if (slot1 == this.gameObject)
             {
                 slot1 = seleced;
-                AutoStack(seleced);
+                AutoStackTop(seleced);
             }
             else if (slot1 != seleced)
             {
                 if (Stackable(seleced))
                 {
                     //Stack(seleced);
-                    AutoStack(seleced);
-
+                    if (!AutoStackTop(seleced))
+                    {
+                        AutoStackBottom(seleced);
+                    }
                 }
                 else
                 {
                     slot1 = seleced;
-                    AutoStack(seleced);
-
+                    if (!AutoStackTop(seleced))
+                    {
+                        AutoStackBottom(seleced);
+                    }
                 }
             }
             else if (slot1==seleced)
             {
-                AutoStack(seleced);
-
+                if (!AutoStackTop(seleced))
+                {
+                    AutoStackBottom(seleced);
+                }
                 //if (DoubleClick())
                 //{
                 //    AutoStack(seleced);
@@ -153,7 +164,10 @@ public class UserInput : MonoBehaviour
             if (slot1.GetComponent<Selectable>().value == 1) 
             {
                 //Stack(selected);
-                AutoStack(selected);
+                if(!AutoStackTop(selected))
+                {
+                    AutoStackBottom(selected);
+                }
 
             }
         }
@@ -167,63 +181,69 @@ public class UserInput : MonoBehaviour
             if (slot1.GetComponent<Selectable>().value == 13) 
             {
                 //Stack(selected);
-                AutoStack(selected);
-
+                if (!AutoStackTop(selected))
+                {
+                    AutoStackBottom(selected);
+                }
             }
         }
     }
 
     bool Stackable(GameObject selected)
     {
-        Selectable s1 = slot1.GetComponent<Selectable>();
-        Selectable s2 = selected.GetComponent<Selectable>();
-
-        if(!s2.inDeckPile)
+        if (slot1 != null & selected != null)
         {
-            if (s2.top)
+            Selectable s1 = slot1.GetComponent<Selectable>();
+            Selectable s2 = selected.GetComponent<Selectable>();
+
+            if (!s2.inDeckPile)
             {
-                if ((s1.suit == s2.suit) || (s1.value == 1 && s2.suit == null))
+                if (s2.top)
                 {
-                    if (s1.value == s2.value + 1)
+                    if ((s1.suit == s2.suit) || (s1.value == 1 && s2.suit == null))
                     {
-                        return true;
+                        if (s1.value == s2.value + 1)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
                 else
                 {
-                    return false;
-                }
-            }
-            else
-            {
-                if (s1.value == s2.value - 1)
-                {
-                    bool card1Red = true;
-                    bool card2Red = true;
+                    if (s1.value == s2.value - 1)
+                    {
+                        bool card1Red = true;
+                        bool card2Red = true;
 
-                    if (s1.suit == "C" || s1.suit == "S")
-                    {
-                        card1Red = false;
-                    }
+                        if (s1.suit == "C" || s1.suit == "S")
+                        {
+                            card1Red = false;
+                        }
 
-                    if (s2.suit == "C" || s2.suit == "S")
-                    {
-                        card2Red = false;
-                    }
+                        if (s2.suit == "C" || s2.suit == "S")
+                        {
+                            card2Red = false;
+                        }
 
-                    if (card1Red == card2Red)
-                    {
-                        print("not stackable");
-                        return false;
-                    }
-                    else
-                    {
-                        print("stackable");
-                        return true;
+                        if (card1Red == card2Red)
+                        {
+                            print("not stackable");
+                            return false;
+                        }
+                        else
+                        {
+                            print("stackable");
+                            return true;
+                        }
                     }
                 }
             }
-        }     
+        }
+
         return false;
     }
 
@@ -232,7 +252,7 @@ public class UserInput : MonoBehaviour
         Selectable s1 = slot1.GetComponent<Selectable>();
         Selectable s2 = selected.GetComponent<Selectable>();
         Debug.Log(s2);
-        float yOffset = 0.15f;
+        float yOffset = 0.2f;
 
         if (s2.top || (!s2.top && s1.value == 13)) 
         {
@@ -316,8 +336,9 @@ public class UserInput : MonoBehaviour
     //    }
     //}
 
-    void AutoStack(GameObject selected)
+    bool AutoStackTop(GameObject selected)
     {
+        bool stackCheck = false;
         for (int i = 0; i < solitaire.topPos.Length; i++)
         {
             Selectable stack = solitaire.topPos[i].GetComponent<Selectable>();
@@ -327,21 +348,10 @@ public class UserInput : MonoBehaviour
                 {
                     slot1 = selected;
                     Stack(stack.gameObject);
+                    stackCheck = true;
                     break;
                 }
-            }
-            else if (selected.GetComponent<Selectable>().value == 13)
-            {
-                for (int j = 0; j < solitaire.bottomPos.Length; j++)
-                {
-                    if (solitaire.bottomPos[j].transform.childCount == 0)
-                    {
-                        slot1 = selected;
-                        Stack(solitaire.bottomPos[j].gameObject);
-                        break;
-                    }
-                }
-            }
+            }           
             else
             {
                 if ((solitaire.topPos[i].GetComponent<Selectable>().suit == slot1.GetComponent<Selectable>().suit)
@@ -369,94 +379,67 @@ public class UserInput : MonoBehaviour
                         }
                         GameObject lastCard = GameObject.Find(lastCardName);
                         Stack(lastCard);
+                        stackCheck = true;
                         break;
                     }
-                }
-                else
+                }                
+            }       
+        }
+        return stackCheck;
+    }
+
+    void AutoStackBottom(GameObject selected)
+    {
+        if (selected.GetComponent<Selectable>().value == 13)
+        {
+            for (int j = 0; j < solitaire.bottomPos.Length; j++)
+            {
+                if (solitaire.bottomPos[j].transform.childCount == 0)
                 {
-                    for (int k = 0; k < solitaire.bottomPos.Length; k++)
+                    slot1 = selected;
+                    Stack(solitaire.bottomPos[j].gameObject);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (int k = 0; k < solitaire.bottomPos.Length; k++)
+            {
+                Selectable stack = solitaire.bottomPos[k].GetComponentsInChildren<Selectable>().Last();
+                if (stack.faceUp == true && stack.GetComponent<Selectable>().value == slot1.GetComponent<Selectable>().value + 1)
+                {
+                    slot1 = selected;
+                    string lastCardName2 = stack.suit + stack.value.ToString();
+                    if (stack.value == 1)
                     {
-                        foreach (Selectable child in solitaire.bottomPos[k].GetComponentsInChildren<Selectable>())
+                        lastCardName2 = stack.suit + "A";
+                    }
+                    if (stack.value == 11)
+                    {
+                        lastCardName2 = stack.suit + "J";
+                    }
+                    if (stack.value == 12)
+                    {
+                        lastCardName2 = stack.suit + "Q";
+                    }
+                    if (stack.value == 13)
+                    {
+                        lastCardName2 = stack.suit + "K";
+                    }
+                    GameObject lastCard2 = GameObject.Find(lastCardName2);
+                    if (Stackable(lastCard2) == true)
+                    {
+                        if (CheckLastCard(lastCard2))
                         {
-                            if (child.faceUp == true && child.GetComponent<Selectable>().value == slot1.GetComponent<Selectable>().value + 1)
-                            {
-                                slot1 = selected;
-                                string lastCardName2 = child.suit + child.value.ToString();
-                                if (child.value == 1)
-                                {
-                                    lastCardName2 = child.suit + "A";
-                                }
-                                if (child.value == 11)
-                                {
-                                    lastCardName2 = child.suit + "J";
-                                }
-                                if (child.value == 12)
-                                {
-                                    lastCardName2 = child.suit + "Q";
-                                }
-                                if (child.value == 13)
-                                {
-                                    lastCardName2 = child.suit + "K";
-                                }
-                                GameObject lastCard2 = GameObject.Find(lastCardName2);
-                                if (Stackable(lastCard2) == true)
-                                {
-                                    if (CheckLastCard(lastCard2))
-                                    {
-                                        Stack(lastCard2);
-                                        Destroy(child);
-                                        goto outTheLoop;
-                                    }
-                                }
-                            }
+                            Stack(lastCard2);
+                            break;
                         }
                     }
                 }
-            }       
+            }
         }
-    outTheLoop:;
     }
-
-                    //Selectable[] stack2 = FindObjectsOfType<Selectable>();
-                    //foreach (Selectable stack3 in stack2)
-                    //{
-                    //    if (stack3.faceUp == true
-                    //       && stack3.GetComponent<Selectable>().value == slot1.GetComponent<Selectable>().value + 1
-                    //       && stack3.GetComponent<Selectable>().inDeckPile == false)
-                    //    {
-                    //        slot1 = selected;
-                    //        string lastcardname2 = stack3.suit + stack3.value.ToString();
-                    //        if (stack3.value == 1)
-                    //        {
-                    //            lastcardname2 = stack3.suit + "a";
-                    //        }
-                    //        if (stack3.value == 11)
-                    //        {
-                    //            lastcardname2 = stack3.suit + "j";
-                    //        }
-                    //        if (stack3.value == 12)
-                    //        {
-                    //            lastcardname2 = stack3.suit + "q";
-                    //        }
-                    //        if (stack3.value == 13)
-                    //        {
-                    //            lastcardname2 = stack3.suit + "k";
-                    //        }
-                    //        GameObject lastcard2 = GameObject.Find(lastcardname2);
-                    //        if (Stackable(lastcard2) == true)
-                    //        {
-                    //            if (CheckLastCard(lastcard2))
-                    //            {
-                    //                Stack(lastcard2);
-                    //                break;
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    //        }
-                    //    }
-                    //}
-                    //}
 
     bool HasNoChildren(GameObject card)
     {
