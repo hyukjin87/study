@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIButtons : MonoBehaviour
 {
     public GameObject highScorePanel;
+    public ScoreKeeper gamePlayTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +21,7 @@ public class UIButtons : MonoBehaviour
     public void PlayAgain()
     {
         highScorePanel.SetActive(false);
+        gamePlayTime.playTime = 0;
         ResetScene();
     }
 

@@ -1,20 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreKeeper : MonoBehaviour
 {
     public Selectable[] topStacks;
     public GameObject highScorePanel;
+    public float playTime;
+    public Text textTime;
     // Start is called before the first frame update
     void Start()
     {
-        
+        playTime = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        playTime += Time.deltaTime;
+        textTime.text = "Time : " + Mathf.Round(playTime);
+
         if(HasWon())
         {
             Win();

@@ -1,4 +1,4 @@
-const API_KEY = ""
+const API_KEY = "5c288c973ab26ca183eb677e219c30e9"
 
 function geoLocationSuccess(position) {
     const lat = position.coords.latitude;
