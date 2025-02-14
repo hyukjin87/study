@@ -13,32 +13,26 @@
 #ifndef _PIONEERCARRADIO
 #define _PIONEERCARRADIO
 
-// Constant
+// Constants
 #define kVolume 1
 
 class PioneerCarRadio : public AmFmRadio
 {
 private:
 	char* inputKeyPresses;			// user-input key value
-	char radioName[50];				// radio name value
-	bool onlyAM;					// only AM frequency check value
 
 public:
-	/* constructor */
+	/* constructors */
 	PioneerCarRadio(void);
 
 	/* destructor */
-	virtual ~PioneerCarRadio(void);
+	~PioneerCarRadio(void);
 
 	/* accessors */
 	char* GetInputKeyPresses(void);
-	char* GetRadioName(void);
-	bool GetOnlyAM(void);
 
 	/* mutators */
-	void SetInputKeyPresses(void);
-	void SetRadioName(const char* newRadioName);
-	void SetOnlyAM(void);
+	bool SetInputKeyPresses(int newInput);
 
 	// output current radio settings
 	void ShowCarRadioSetting(void);

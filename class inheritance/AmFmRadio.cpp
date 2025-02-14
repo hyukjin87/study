@@ -379,7 +379,7 @@ void AmFmRadio::ScanUp(void)
 		}
 		else
 		{
-			current_station = current_station + kScanAM;
+			current_station = current_station + kVolumeAM;
 			// The changed frequency value is stored in the previous frequency data value
 			beforeStation.AMButton = (int)current_station;
 		}
@@ -394,7 +394,7 @@ void AmFmRadio::ScanUp(void)
 		}
 		else
 		{
-			current_station = current_station + kScanFM;
+			current_station = current_station + kVolumeFM;
 			// The changed frequency value is stored in the previous frequency data value
 			beforeStation.FMButton = (float)current_station;
 		}
@@ -414,29 +414,29 @@ void AmFmRadio::ScanDown(void)
 {
 	if (strcmp("AM", frequency) == 0)
 	{
-		//if current_station is 530, the current_station becomes 1700
+		//if current_station is 1700, the current_station becomes 530
 		if (current_station == kAM)
 		{
 			current_station = kMaxAM;
 		}
 		else
 		{
-			current_station = current_station - kScanAM;
+			current_station = current_station - kVolumeAM;
 			// The changed frequency value is stored in the previous frequency data value
 			beforeStation.AMButton = (int)current_station;
 		}
 	}
 	else
 	{
-		//if the current_station is 87.9, the current_station becomes 107.9
-		//Note: AmFmRadios down .2 for the FM. That's how it's modeled here.
+		//if the current_station is 107.9, the current_station becomes 87.9
+		//Note: AmFmRadios jump .2 for the FM. That's how it's modeled here.
 		if (current_station <= kFM)
 		{
 			current_station = kMaxFM;
 		}
 		else
 		{
-			current_station = current_station - kScanFM;
+			current_station = current_station - kVolumeFM;
 			// The changed frequency value is stored in the previous frequency data value
 			beforeStation.FMButton = (float)current_station;
 		}

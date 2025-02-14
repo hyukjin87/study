@@ -17,8 +17,8 @@
 #define kFM 87.9f
 #define kMaxAM 1700
 #define kMaxFM 107.9f
-#define kScanAM 10
-#define kScanFM 0.2f
+#define kVolumeAM 10
+#define kVolumeFM 0.2f
 
 // Data Type
 struct Freqs
@@ -53,19 +53,19 @@ public:
 	AmFmRadio(bool def, Freqs* newButton);
 
 	/* destructor */
-	virtual ~AmFmRadio(void);
+	~AmFmRadio(void);
 
 	/* mutators */
 	void SetCurrentStation(double newStation);
 	int SetVolume(int newVolume);
 	void ToggleDisplayOutput(void);
-	void PowerToggle(void);	
+	void PowerToggle(void);
+	void ToggleFrequency(void);
 	int SetButton(int button_num);
 	int SelectCurrentStation(int button_num);
 	int SetVolume(void);
-	virtual void ToggleFrequency(void);
-	virtual void ScanUp(void);
-	virtual void ScanDown(void);
+	void ScanUp(void);
+	void ScanDown(void);
 	
 	// output current radio settings
 	void ShowCurrentSettings(void);
